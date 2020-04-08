@@ -1,5 +1,5 @@
-data/
-data/**
+data/face.zip
+data/GAIT.zip
 source/__pycache__/**
 
 # Created by .ignore support plugin (hsz.mobi)
