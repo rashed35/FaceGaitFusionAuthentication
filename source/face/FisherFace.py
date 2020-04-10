@@ -91,7 +91,7 @@ def myPCA(A):
     return W, LL, m
 
 
-def read_faces(directory):
+def read_faces(directory, dont_squeeze=False):
     # function faces = read_faces(directory)
     # Browse the directory, read image files and store faces in a matrix
     # faces: face matrix in which each colummn is a colummn vector for 1 face image
@@ -108,13 +108,20 @@ def read_faces(directory):
         im = cv2.imread(infile, 0)
         # print(im.shape)
         # turn an array into vector
-        im_vec = np.reshape(im, -1)
-        A.append(im_vec)
+        if not dont_squeeze:
+            im_vec = np.reshape(im, -1)
+            A.append(im_vec)
+        else:
+            A.append(im)
         name = f.split('_')[0][-1]
         Label.append(int(name))
 
-    faces = np.array(A, dtype=np.float32)
-    faces = faces.T
+    faces = None
+    if not dont_squeeze:
+        faces = np.array(A, dtype=np.float32)
+        faces = faces.T
+    else:
+        faces = A
     idLabel = np.array(Label)
 
     return faces, idLabel

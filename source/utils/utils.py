@@ -7,6 +7,9 @@ Enter feature description here
 import os
 
 PROJECT_HOME = r'C:\Users\Sanjay Saha\CS5332Assignment2'
+
+IMG_SHAPE = (160, 40)
+
 DATASET_HOME = os.path.join(PROJECT_HOME, 'data')
 RESULTS_HOME = os.path.join(PROJECT_HOME, 'results')
 
