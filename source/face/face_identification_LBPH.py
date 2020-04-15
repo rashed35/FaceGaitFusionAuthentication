@@ -5,7 +5,7 @@ Feature: Enter feature name here
 Enter feature description here
 """
 import cv2
-from source.common_functions import report_results_face
+from source.utils.common_functions import report_results_face
 import matplotlib.pyplot as plt
 import numpy as np
 

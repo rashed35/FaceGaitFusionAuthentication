@@ -10,7 +10,7 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 
-from source.common_functions import report_results_face
+from source.utils.common_functions import report_results_face
 from source.utils.readData import read_data
 from source.utils.signal_preprocess import get_train_test_features
 from source.utils.utils import *

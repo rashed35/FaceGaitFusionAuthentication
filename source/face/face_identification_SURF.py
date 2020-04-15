@@ -4,14 +4,11 @@ Created by Sanjay at 4/10/2020
 Feature: Enter feature name here
 Enter feature description here
 """
-import random
 
 import cv2
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
 
-from source.common_functions import report_results_face
+from source.utils.common_functions import report_results_face
 import numpy as np
 from source.face.FisherFace import read_faces
 from source.utils.utils import *
