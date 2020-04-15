@@ -1,6 +1,7 @@
 import os
 import numpy as np
 
+
 def read_data(dir, index_values, action, sensor):
     input_ids = []
     dataset = []

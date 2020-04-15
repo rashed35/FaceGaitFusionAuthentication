@@ -2,7 +2,7 @@ import numpy as np
 import math
 import os
 from scipy.signal import find_peaks
-from utils import loess
+from source.utils import loess
 import statistics
 from scipy.stats import kurtosis, skew
 
@@ -99,7 +99,7 @@ def get_train_test_features(dataset):
     for idx, signal in enumerate(dataset):
         crops = get_priod_crops(signal, idx + 1)
         num_crops = crops[1].__len__()
-        print(idx, num_crops)
+        # print(idx, num_crops)
         if num_crops >= 16:
             curr_label = idx + 1  # select the user ID as the label
             label_train = np.array([curr_label] * 8).reshape(8, 1)  # label array with same label for all crops
