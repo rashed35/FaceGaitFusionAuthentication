@@ -8,13 +8,17 @@ Enter feature description here
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
 
 from source.face.FisherFace import read_faces, myPCA
+from source.tasks import question5, task8
+from source.utils.common_functions import report_results
 from source.utils.readData import read_data
 from source.utils.signal_preprocess import get_train_test_features
 from source.utils.utils import *
 
-plt.style.use('seaborn-white')
+# plt.style.use('seaborn-white')
 ids = ['04010', '04011', '04012', '04013', '04014', '04015', '04016', '04017', '04018', '04019']
 action = 'walk'
 sensor = 'Left_foot'
@@ -41,18 +45,22 @@ def get_face_classifier():
     train_x = np.dot(W_e.T, (train_faces - m))  # calculating PCA features (train)
     test_x = np.dot(W_e.T, (test_faces - m))  # calculating PCA features (test)
 
-    rf_face = RandomForestClassifier(n_estimators=50)
-    rf_face.fit(train_x.T, train_y)
+    f_model = RandomForestClassifier(n_estimators=50)
+    f_model.fit(train_x.T, train_y)
+    # f_model = KNeighborsClassifier(n_neighbors=9)
+    # f_model.fit(train_x.T, train_y)
 
-    return rf_face, test_x, test_y
+    return f_model, test_x, test_y
 
 
 def get_gait_classifier():
     gait_dataset = read_data(GAIT_DATA_HOME, ids, action, sensor)
     train_x, train_y, test_x, test_y = get_train_test_features(gait_dataset)
-    rf_gait = RandomForestClassifier(n_estimators=150)
-    rf_gait.fit(train_x, train_y)  # train
-    return rf_gait, test_x, test_y
+    g_model = RandomForestClassifier(n_estimators=150)
+    g_model.fit(train_x, train_y)  # train
+    # g_model = DecisionTreeClassifier()
+    # g_model.fit(train_x, train_y)
+    return g_model, test_x, test_y
 
 
 if __name__ == '__main__':
@@ -66,9 +74,12 @@ if __name__ == '__main__':
         t2 = pred_gait[i * 8:(i + 1) * 8, :]  # pick 8 rows
         pred_gait_avg = np.vstack((pred_gait_avg, t2.mean(axis=0)))
 
-    for alpha in [x / 10.0 for x in range(1, 9)]:
+    alpha_list = [x / 10.0 for x in range(7, 8)]
+    acc_list = []
+    for alpha in alpha_list:
         print('alpha=%.2f' % alpha)
         acc_count = 0
+        pred_y = []
         for i in range(face_test_x.shape[1]):  # loop through all test face images
             true_y = face_test_y[i]
             pf = pred_face[i, :]  # face prediction vector of shape (10,)
@@ -76,10 +87,12 @@ if __name__ == '__main__':
 
             fused_pred_vector = alpha * pf + (1-alpha) * gf
             fused_pred = np.argmax(fused_pred_vector)
+            pred_y.append(fused_pred)
             acc_count += 1 if fused_pred == true_y else 0
+        acc, cm, rpt = report_results(face_test_y, pred_y, cmat_flag=True)
+        task8(cm)
 
-            float_formatter = "{:.2f}".format
-            np.set_printoptions(formatter={'float_kind': float_formatter})
-            # print('alpha=%.2f \t prediction=%d' % (alpha, fused_pred))
         acc = acc_count / face_test_x.shape[1]
+        acc_list.append(acc)
         print('\tAccuracy: %.2f' % acc)
+    # question5(alpha_list, acc_list)

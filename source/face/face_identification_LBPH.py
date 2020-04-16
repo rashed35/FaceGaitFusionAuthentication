@@ -5,7 +5,7 @@ Feature: Enter feature name here
 Enter feature description here
 """
 import cv2
-from source.utils.common_functions import report_results_face
+from source.utils.common_functions import report_results
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -27,4 +27,4 @@ if __name__ == '__main__':
     for test_img in test_faces:
         pred_y.append(model.predict(test_img)[0])
 
-    score, confusion_matrix, report = report_results_face(test_y, np.array(pred_y), cmat_flag=True)
+    score, confusion_matrix, report = report_results(test_y, np.array(pred_y), cmat_flag=True)

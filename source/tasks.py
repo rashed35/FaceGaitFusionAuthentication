@@ -78,8 +78,14 @@ def task4(n_list, accuracy_list, conf_mat_n100):
     plt.show()
 
 
-def task5():
-    pass
+def task5(cmat, classifier: str):
+    df_cm = pd.DataFrame(cmat, index=[i for i in range(10)], columns=[i for i in range(10)])
+    plt.figure(figsize=(10, 7))
+    plt.title('Confusion Matrix for %s with CNN Features \n Unequal test images per class due to reduction of images '
+              '\nfrom test-set as feature learner could not detect some faces' % classifier)
+    sn.heatmap(df_cm, annot=True)
+    plt.savefig(os.path.join(RESULTS_HOME, 'task5_confusion_matrix_XXX.png'), dpi=300)
+    plt.show()
 
 
 def task6(data):
@@ -112,5 +118,38 @@ def task7():
         # plt.show()
 
 
-if __name__ == '__main__':
-    task7()
+def task8(cmat):
+    df_cm = pd.DataFrame(cmat, index=[i for i in range(10)], columns=[i for i in range(10)])
+    plt.figure(figsize=(10, 7))
+    plt.title('Confusion Matrix for Fusion of Face and Gait \n '
+              'Face model: Random Forest (50 trees) | Gait model: Random Forest (150 trees)')
+    sn.heatmap(df_cm, annot=True)
+    plt.savefig(os.path.join(RESULTS_HOME, 'task8_confusion_matrix.png'), dpi=300)
+    plt.show()
+
+
+def question3(d_list, accuracies):
+    plt.figure()
+    for D, acc in zip(d_list, accuracies):
+        plt.scatter(D, acc, color='blue')
+        plt.text(D + 0.01, acc, 'acc=%.2f' % acc, fontsize=9)
+    plt.title('Performance of Face model (PCA) for different D values \n D vs. accuracy')
+    plt.xticks(d_list)
+    plt.xlabel('alpha')
+    plt.ylabel('Accuracy')
+    plt.savefig(os.path.join(RESULTS_HOME, 'question3_D_vs_acc.png'), dpi=300)
+
+
+def question5(alphas, accuracies):
+    plt.figure()
+    for alpha, acc in zip(alphas, accuracies):
+        plt.scatter(alpha, acc, color='blue')
+        plt.text(alpha + 0.01, acc, 'acc=%.2f' % acc, fontsize=9)
+    plt.title('Performance of Fusion between Face and Gait \n alpha vs. accuracy')
+    plt.xticks(alphas)
+    plt.xlabel('alpha')
+    plt.ylabel('Accuracy')
+    plt.savefig(os.path.join(RESULTS_HOME, 'question5_alpha_vs_acc.png'), dpi=300)
+
+# if __name__ == '__main__':
+#     task7()

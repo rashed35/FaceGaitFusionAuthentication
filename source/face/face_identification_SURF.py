@@ -8,7 +8,7 @@ Enter feature description here
 import cv2
 from sklearn.ensemble import RandomForestClassifier
 
-from source.utils.common_functions import report_results_face
+from source.utils.common_functions import report_results
 import numpy as np
 from source.face.FisherFace import read_faces
 from source.utils.utils import *
@@ -89,7 +89,7 @@ if __name__ == '__main__':
             pred = np.argmax(counts)
             pred_y.append(pred)
             test_y.append(lbl)
-        score, confusion_matrix, report = report_results_face(test_y, pred_y)
+        score, confusion_matrix, report = report_results(test_y, pred_y)
         acc_list_rf.append(score)
         print('Tree count: %d \t Accuracy: %.3f' % (n, score))
     print()

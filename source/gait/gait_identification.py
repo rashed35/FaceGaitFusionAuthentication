@@ -10,7 +10,7 @@ from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 import numpy as np
 
-from source.utils.common_functions import report_results_face
+from source.utils.common_functions import report_results
 from source.utils.readData import read_data
 from source.utils.signal_preprocess import get_train_test_features
 from source.utils.utils import *
@@ -63,7 +63,7 @@ if __name__ == '__main__':
         print('========================================================')
         classifiers[i].fit(train_x, train_y)  # train
         pred_y = classifiers[i].predict(test_x)
-        score, confusion_matrix, report = report_results_face(test_y, pred_y, cmat_flag=True)
+        score, confusion_matrix, report = report_results(test_y, pred_y, cmat_flag=True)
         np.save(os.path.join(RESULTS_HOME, 'gait', get_safe_string(classifiers_title[i]) + '_cmat.npy'),
                 confusion_matrix)
         print(score)

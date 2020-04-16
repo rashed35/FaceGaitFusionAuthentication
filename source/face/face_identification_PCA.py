@@ -6,9 +6,13 @@ Enter feature description here
 """
 
 import cv2
+from sklearn import metrics
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
 
-from source.utils.common_functions import report_results_face
+from source.tasks import question3
+from source.utils.common_functions import report_results
 from source.face.FisherFace import read_faces, myPCA
 from source.utils.utils import *
 import numpy as np
@@ -65,73 +69,64 @@ if __name__ == '__main__':
     train_x = np.dot(W_e.T, (train_faces - m))  # calculating PCA features (train)
     test_x = np.dot(W_e.T, (test_faces - m))  # calculating PCA features (test)
 
-    print('# ======================= Question 3 ========================= #')
-    acc_list = []
-    cm_list = []
-    for d in D_LIST:
-        W_e, m = learn_PCA(train_faces, d)
-        train_x = np.dot(W_e.T, (train_faces - m))  # calculating PCA features (train)
-        test_x = np.dot(W_e.T, (test_faces - m))  # calculating PCA features (test)
-
-        rand_forest = RandomForestClassifier(n_estimators=50)
-        rand_forest.fit(train_x.T, train_y)
-        pred_y = rand_forest.predict(test_x.T)
-        print('D = ', d)
-        acc, cm, rpt = report_results_face(test_y, pred_y, cmat_flag=True)
-        acc_list.append(acc)
-
-        df_cm = pd.DataFrame(cm, index=[i for i in range(10)], columns=[i for i in range(10)])
-        plt.figure(figsize=(10, 7))
-        plt.title('Confusion Matrix for Random Forest | n=50, D='+str(d)+' (for PCA)')
-        sn.heatmap(df_cm, annot=True)
-        plt.savefig(os.path.join(RESULTS_HOME, 'question4_confusion_matrix_D_'+str(d)+'.png'), dpi=300)
-        plt.show()
-
-    # plt.figure()
-    # for n, acc in zip(D_LIST, acc_list):
-    #     plt.scatter(n, acc, color='blue')
-    #     plt.text(n-0.3, acc-0.003, 'D=' + str(n) + '\nacc=%.2f' % acc, fontsize=9)
-    # plt.title('Performance of RF (n_est=50) with different D values for PCA features')
-    # plt.xticks(D_LIST)
-    # plt.xlabel('D (# of eigenfaces selected for PCA)')
-    # plt.ylabel('Accuracy')
-    # plt.savefig(os.path.join(RESULTS_HOME, 'question3_D_values_vs_acc.png'), dpi=300)
-
-    # print('# ======================= K-Nearest Neighbors ========================= #')
+    # print('# ======================= Question 3 ========================= #')
     # acc_list = []
-    # cmat_k5 = None
-    # for k in K_LIST:
-    #     knn = KNeighborsClassifier(n_neighbors=k)
-    #     knn.fit(train_x.T, train_y)
-    #     knn_pred_y = knn.predict(test_x.T)
-    #     print('k-neighbors: %d' % k)
+    # cm_list = []
+    # for d in D_LIST:
+    #     W_e, m = learn_PCA(train_faces, d)
+    #     train_x = np.dot(W_e.T, (train_faces - m))  # calculating PCA features (train)
+    #     test_x = np.dot(W_e.T, (test_faces - m))  # calculating PCA features (test)
     #
-    #     acc, cmat, rpt = report_results_face(test_y, knn_pred_y) if k != 5 \
-    #         else report_results_face(test_y, knn_pred_y, cmat_flag=True)
-    #     cmat_k5 = cmat if k == 5 else cmat_k5
-    #     acc_list.append(acc)
-    # print()
-
-    # print('# ======================= Random Forest ========================= #')
-    # acc_list_rf = []
-    # cmat_n100 = None
-    # for n in N_ESTIMATORS:
-    #     rand_forest = RandomForestClassifier(n_estimators=n)
+    #     rand_forest = RandomForestClassifier(n_estimators=50)
     #     rand_forest.fit(train_x.T, train_y)
-    #     rf_pred_y = rand_forest.predict(test_x.T)
-    #     score = metrics.accuracy_score(test_y, rf_pred_y)
-    #     acc, cmat, rpt = report_results(test_y, rf_pred_y) if n != 100 \
-    #         else report_results(test_y, rf_pred_y, cmat_flag=True)
-    #     cmat_n100 = cmat if n == 100 else cmat_n100
-    #     acc_list_rf.append(acc)
-    #     print('Tree count: %d \t Accuracy: %.3f' % (n, score))
-    # print()
+    #     pred_y = rand_forest.predict(test_x.T)
+    #     print('D = ', d)
+    #     acc, cm, rpt = report_results_face(test_y, pred_y, cmat_flag=True)
+    #     acc_list.append(acc)
+    #
+    #     # df_cm = pd.DataFrame(cm, index=[i for i in range(10)], columns=[i for i in range(10)])
+    #     # plt.figure(figsize=(10, 7))
+    #     # plt.title('Confusion Matrix for Random Forest | n=50, D='+str(d)+' (for PCA)')
+    #     # sn.heatmap(df_cm, annot=True)
+    #     # plt.savefig(os.path.join(RESULTS_HOME, 'question4_confusion_matrix_D_'+str(d)+'.png'), dpi=300)
+    #     # # plt.show()
+    # question3(D_LIST, acc_list)
 
-    # print('# ======================= SVC ========================= #')
-    # svc = SVC(kernel='linear', C=1)
-    # svc.fit(train_x.T, train_y)
-    # pred_y = svc.predict(test_x.T)
-    # score, confusion_matrix, report = report_results_face(test_y, np.array(pred_y), cmat_flag=True)
+    print('# ======================= K-Nearest Neighbors ========================= #')
+    acc_list = []
+    cmat_k5 = None
+    for k in K_LIST:
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(train_x.T, train_y)
+        knn_pred_y = knn.predict(test_x.T)
+        print('k-neighbors: %d' % k)
+
+        acc, cmat, rpt = report_results(test_y, knn_pred_y) if k != 5 \
+            else report_results(test_y, knn_pred_y, cmat_flag=True)
+        cmat_k5 = cmat if k == 5 else cmat_k5
+        acc_list.append(acc)
+    print()
+
+    print('# ======================= Random Forest ========================= #')
+    acc_list_rf = []
+    cmat_n100 = None
+    for n in N_ESTIMATORS:
+        rand_forest = RandomForestClassifier(n_estimators=n)
+        rand_forest.fit(train_x.T, train_y)
+        rf_pred_y = rand_forest.predict(test_x.T)
+        score = metrics.accuracy_score(test_y, rf_pred_y)
+        acc, cmat, rpt = report_results(test_y, rf_pred_y) if n != 100 \
+            else report_results(test_y, rf_pred_y, cmat_flag=True)
+        cmat_n100 = cmat if n == 100 else cmat_n100
+        acc_list_rf.append(acc)
+        print('Tree count: %d \t Accuracy: %.3f' % (n, score))
+    print()
+
+    print('# ======================= SVC ========================= #')
+    svc = SVC(kernel='linear', C=1)
+    svc.fit(train_x.T, train_y)
+    pred_y = svc.predict(test_x.T)
+    score, confusion_matrix, report = report_results(test_y, np.array(pred_y), cmat_flag=True)
 
     # ======================= TASKS ========================= #
     # task2(W_e, m)

@@ -9,7 +9,7 @@ import decimal
 from sklearn import metrics
 
 
-def report_results_face(actual, predicted, cmat_flag=False, rprt_flag=False):
+def report_results(actual, predicted, cmat_flag=False, rprt_flag=False):
     """
     Reports results from the actual labels and predicted labels
     :param actual: original labels (test_y)

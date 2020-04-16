@@ -9,7 +9,7 @@ import random
 import cv2
 from sklearn.svm import SVC
 
-from source.utils.common_functions import report_results_face
+from source.utils.common_functions import report_results
 import matplotlib.pyplot as plt
 import numpy as np
 from source.face.FisherFace import read_faces
@@ -99,4 +99,4 @@ if __name__ == '__main__':
         pred_y.append(pred)
         test_y.append(lbl)
 
-    score, confusion_matrix, report = report_results_face(test_y, np.array(pred_y), cmat_flag=True)
+    score, confusion_matrix, report = report_results(test_y, np.array(pred_y), cmat_flag=True)
