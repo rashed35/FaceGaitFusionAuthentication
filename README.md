@@ -3,7 +3,7 @@ This was an assignment in one of my courses in the last semester (Spring 2020). 
 > The goal of this Assignment is to use Principal Components Analysis (PCA), K-Nearest
 Neighbours (kNN) and Random Forest to recognize face images and gait signals.
 
-I experimented with some more features and classifiers along with the ones mentioned in our problem description. 
+I experimented with some more features and classifiers along with the ones mentioned in our problem description. Find the detailed report that I prepared for the assignment in [FinalReport.pdf](FinalReport.pdf). 
 
 ## Dataset
 I will not publish the data given to us as I don't have the permission to do so. However, I am sharing the codes and the results.
